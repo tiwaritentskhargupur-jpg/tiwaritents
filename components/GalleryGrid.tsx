@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { withBase } from "@/lib/assetPath";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { business, type GalleryFilter, type GalleryItem } from "@/site.config";
 import { fillTemplate, whatsappHref } from "@/lib/links";
@@ -118,7 +119,7 @@ export function GalleryGrid({
                 }`}
               >
                 <Image
-                  src={item.image}
+                  src={withBase(item.image)}
                   alt={item.imageAlt}
                   fill
                   sizes={variant === "home" ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 33vw, 100vw"}
@@ -166,7 +167,7 @@ export function GalleryGrid({
           >
             <div className="relative bg-black flex items-center justify-center max-h-[70vh] overflow-hidden">
               <Image
-                src={active.image}
+                src={withBase(active.image)}
                 alt={active.imageAlt}
                 width={1600}
                 height={1067}

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { withBase } from "@/lib/assetPath";
 
 export function Photo({
   src,
@@ -15,7 +16,7 @@ export function Photo({
 }) {
   return (
     <Image
-      src={src}
+      src={withBase(src)}
       alt={alt}
       fill
       sizes={sizes}
