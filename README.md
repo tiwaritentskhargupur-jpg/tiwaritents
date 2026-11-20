@@ -36,15 +36,29 @@ Check a production build before you deploy:
 npm run build
 ```
 
-## Deploy on Vercel
+## Deploy on GitHub Pages
 
-The Vercel CLI is not set up on this machine, so deploy from the Vercel website by importing the GitHub repository.
+The site is a static export (`output: "export"` in `next.config.ts`). A GitHub Actions workflow
+(`.github/workflows/deploy.yml`) builds it and publishes the `out/` folder on every push to `main`.
 
-1. Push this project to GitHub (the repository name used for this site is `tent-house`).
-2. Sign in at [vercel.com/new](https://vercel.com/new).
-3. Choose **Import Git Repository** and select `tent-house`.
-4. Leave the framework preset as **Next.js**. The root of the repository is the app. No environment variables are required.
-5. Deploy.
-6. When the site has a real domain, set `siteUrl` in `site.config.ts` to that address (for example `https://your-domain.com`) and deploy again. Sitemap, robots, and social preview links use that value.
+One-time setup:
 
-Vercel will run `npm run build` for you. Later changes on the connected branch deploy automatically.
+1. In the repo, open **Settings -> Pages** and set **Source** to **GitHub Actions**.
+2. Under **Custom domain**, enter the domain (for example `www.example.com`) and save.
+   GitHub then creates or expects a `CNAME` file; keep the domain in **Settings -> Pages** as the source of truth.
+3. At the domain registrar add DNS records:
+   - `www` -> CNAME to `<github-username>.github.io`
+   - apex domain -> A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+4. When the certificate is ready, tick **Enforce HTTPS**.
+5. Set `siteUrl` in `site.config.ts` to the final address (for example `https://www.example.com`) and push again.
+   The sitemap, robots file and social preview links use that value.
+
+Because the site is served from the domain root, no `basePath` is needed. If you ever serve it from
+`<user>.github.io/<repo>` instead, add `basePath: "/<repo>"` to `next.config.ts`.
+
+Preview the exact output locally:
+
+```bash
+npm run build
+npx serve out
+```
